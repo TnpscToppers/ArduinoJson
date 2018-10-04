@@ -4,20 +4,18 @@
 
 #pragma once
 
-#include "Data/JsonVariantTo.hpp"
-#include "JsonVariant.hpp"
-#include "Memory/DynamicMemoryPool.hpp"
+#include "../Data/JsonVariantTo.hpp"
+#include "../JsonVariant.hpp"
+#include "../Memory/DynamicMemoryPool.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
-class DynamicJsonDocument {
+template <typename TMemoryPool>
+class JsonDocument {
  public:
   uint8_t nestingLimit;
 
-  DynamicJsonDocument() : nestingLimit(ARDUINOJSON_DEFAULT_NESTING_LIMIT) {}
-  DynamicJsonDocument(size_t capacity)
-      : nestingLimit(ARDUINOJSON_DEFAULT_NESTING_LIMIT),
-        _memoryPool(capacity) {}
+  JsonDocument() : nestingLimit(ARDUINOJSON_DEFAULT_NESTING_LIMIT) {}
 
   template <typename T>
   bool is() const {
@@ -49,7 +47,7 @@ class DynamicJsonDocument {
     return getVariant().accept(visitor);
   }
 
-  DynamicMemoryPool& memoryPool() {
+  TMemoryPool& memoryPool() {
     return _memoryPool;
   }
 
@@ -58,7 +56,7 @@ class DynamicJsonDocument {
     return JsonVariant(&_memoryPool, &_rootData);
   }
 
-  mutable DynamicMemoryPool _memoryPool;
+  mutable TMemoryPool _memoryPool;
   mutable JsonVariantData _rootData;
 };
 }  // namespace ARDUINOJSON_NAMESPACE

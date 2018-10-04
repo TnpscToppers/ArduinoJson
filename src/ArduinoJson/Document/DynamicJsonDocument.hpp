@@ -4,37 +4,35 @@
 
 #pragma once
 
-#include "Data/JsonVariantTo.hpp"
-#include "JsonVariant.hpp"
-#include "Memory/StaticMemoryPool.hpp"
+#include "../Data/JsonVariantTo.hpp"
+#include "../JsonVariant.hpp"
+#include "../Memory/DynamicMemoryPool.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
-template <size_t CAPACITY>
-class StaticJsonDocument {
+class DynamicJsonDocument {
  public:
   uint8_t nestingLimit;
 
-  StaticJsonDocument() : nestingLimit(ARDUINOJSON_DEFAULT_NESTING_LIMIT) {}
-
-  StaticMemoryPoolBase& memoryPool() {
-    return _memoryPool;
-  }
+  DynamicJsonDocument() : nestingLimit(ARDUINOJSON_DEFAULT_NESTING_LIMIT) {}
+  DynamicJsonDocument(size_t capacity)
+      : nestingLimit(ARDUINOJSON_DEFAULT_NESTING_LIMIT),
+        _memoryPool(capacity) {}
 
   template <typename T>
   bool is() const {
-    return getVariant().template is<T>();
+    return getVariant().is<T>();
   }
 
   template <typename T>
   typename JsonVariantAs<T>::type as() const {
-    return getVariant().template as<T>();
+    return getVariant().as<T>();
   }
 
   template <typename T>
   typename JsonVariantTo<T>::type to() {
     _memoryPool.clear();
-    return getVariant().template to<T>();
+    return getVariant().to<T>();
   }
 
   void clear() {
@@ -51,13 +49,16 @@ class StaticJsonDocument {
     return getVariant().accept(visitor);
   }
 
+  DynamicMemoryPool& memoryPool() {
+    return _memoryPool;
+  }
+
  private:
   JsonVariant getVariant() const {
     return JsonVariant(&_memoryPool, &_rootData);
   }
 
-  mutable StaticMemoryPool<CAPACITY> _memoryPool;
+  mutable DynamicMemoryPool _memoryPool;
   mutable JsonVariantData _rootData;
 };
-
 }  // namespace ARDUINOJSON_NAMESPACE

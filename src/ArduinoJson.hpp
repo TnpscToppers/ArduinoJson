@@ -6,8 +6,8 @@
 
 #include "ArduinoJson/Namespace.hpp"
 
-#include "ArduinoJson/DynamicJsonDocument.hpp"
-#include "ArduinoJson/StaticJsonDocument.hpp"
+#include "ArduinoJson/Document/DynamicJsonDocument.hpp"
+#include "ArduinoJson/Document/StaticJsonDocument.hpp"
 
 #include "ArduinoJson/JsonObjectImpl.hpp"
 
