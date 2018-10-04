@@ -52,6 +52,10 @@ class DynamicMemoryPoolBase : public MemoryPool {
     clear();
   }
 
+  void reserve(int capacity) {
+    _nextBlockCapacity = capacity;
+  }
+
   // Gets the number of bytes occupied in the memoryPool
   size_t size() const {
     size_t total = 0;
