@@ -20,18 +20,18 @@ class JsonDocument {
 
   template <typename T>
   bool is() const {
-    return getVariant().is<T>();
+    return getVariant().template is<T>();
   }
 
   template <typename T>
   typename JsonVariantAs<T>::type as() const {
-    return getVariant().as<T>();
+    return getVariant().template as<T>();
   }
 
   template <typename T>
   typename JsonVariantTo<T>::type to() {
     _memoryPool.clear();
-    return getVariant().to<T>();
+    return getVariant().template to<T>();
   }
 
   void clear() {
