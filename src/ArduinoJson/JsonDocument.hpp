@@ -4,9 +4,10 @@
 
 #pragma once
 
-#include "../Data/JsonVariantTo.hpp"
-#include "../JsonVariant.hpp"
-#include "../Memory/DynamicMemoryPool.hpp"
+#include "Data/JsonVariantTo.hpp"
+#include "JsonVariant.hpp"
+#include "Memory/DynamicMemoryPool.hpp"
+#include "Memory/StaticMemoryPool.hpp"
 
 namespace ARDUINOJSON_NAMESPACE {
 
@@ -59,4 +60,21 @@ class JsonDocument {
   mutable TMemoryPool _memoryPool;
   mutable JsonVariantData _rootData;
 };
+
+class DynamicJsonDocument : public JsonDocument<DynamicMemoryPool> {
+ public:
+  DynamicJsonDocument() {}
+  DynamicJsonDocument(size_t capacity) {
+    memoryPool().reserve(capacity);
+  }
+};
+
+template <size_t CAPACITY>
+class StaticJsonDocument : public JsonDocument<StaticMemoryPool<CAPACITY> > {
+ public:
+  StaticMemoryPoolBase& memoryPool() {
+    return JsonDocument<StaticMemoryPool<CAPACITY> >::memoryPool();
+  }
+};
+
 }  // namespace ARDUINOJSON_NAMESPACE

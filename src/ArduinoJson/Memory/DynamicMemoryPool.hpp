@@ -7,7 +7,7 @@
 #include "../Strings/StringInMemoryPool.hpp"
 #include "MemoryPool.hpp"
 
-#include <stdlib.h>
+#include <stdlib.h>  // malloc, free
 
 #if defined(__clang__)
 #pragma clang diagnostic push
