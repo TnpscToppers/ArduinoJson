@@ -52,7 +52,7 @@ class DynamicMemoryPoolBase : public MemoryPool {
     clear();
   }
 
-  void reserve(int capacity) {
+  void reserve(size_t capacity) {
     _nextBlockCapacity = capacity;
   }
 
